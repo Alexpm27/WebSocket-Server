@@ -1,8 +1,8 @@
 package com.dominio.impl;
 
-import org.apache.log4j.Logger;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @ServerEndpoint(value = "/testWebSocket/{token}")
 public class WebSocketImpl {
-	private static final Logger LOG = Logger.getLogger(WebSocketImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WebSocketImpl.class);
 	private static ConcurrentHashMap<String, WebSocketImpl> concurrentHashMap = new ConcurrentHashMap<>(12);
 
 	/**
@@ -45,6 +45,8 @@ public class WebSocketImpl {
 	@OnMessage
 	public void onMessage(String message, @PathParam("token") String token) throws Exception {
 		System.out.println("receive a message from client id={},msg={}" + token + " " + message);
+		sendMessage(token, message);
+		sendAllMessage(message);
 		LOG.info("receive a message from client id={},msg={}" + token + " " + message);
 	}
 
